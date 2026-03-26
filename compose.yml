@@ -1,0 +1,16 @@
+services:
+  svelte:
+    image: node:24-alpine
+    restart: ${RESTART}
+    stdin_open: true
+    tty: true
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+      - NPM_CONFIG_LOGLEVEL=info
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - "8888:8888"
+    command: ["npm"]
