@@ -7,10 +7,9 @@ services:
     user: "node"
     working_dir: /home/node/app
     environment:
-      - NODE_ENV=production
       - NPM_CONFIG_LOGLEVEL=info
     volumes:
       - ./:/home/node/app
     ports:
       - "8888:8888"
-    #command: ["npm", "install"]
+    command: ["npm", "run", "dev", "--", "--port", "8888", "--host"]
