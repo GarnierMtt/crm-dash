@@ -1,7 +1,7 @@
 services:
   svelte:
     image: node:24-alpine
-    restart: ${RESTART}
+    #restart: ${RESTART}
     stdin_open: true
     tty: true
     user: "node"
@@ -13,4 +13,4 @@ services:
       - ./:/home/node/app
     ports:
       - "8888:8888"
-    command: ["npm"]
+    #command: ["npm", "install"]
