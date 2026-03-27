@@ -24,7 +24,7 @@ To recreate this project with the same configuration:
 
 ```sh
 # recreate this project
-npx sv@0.13.0 create --template demo --types ts --install npm .
+npx sv@0.13.0 create --template demo --types ts --add prettier eslint vitest="usages:unit,component" playwright tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:node" devtools-json --install npm ./
 ```
 
 ## Developing
