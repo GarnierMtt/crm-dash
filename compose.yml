@@ -5,7 +5,7 @@ services:
     stdin_open: true
     tty: true
     user: "node"
-    working_dir: /home/node/app
+    working_dir: /home/node/app/dash
     environment:
       - NPM_CONFIG_LOGLEVEL=info
     volumes:
