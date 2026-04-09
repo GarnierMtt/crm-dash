@@ -1,11 +1,16 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
+    import Login from './Login.svelte';
 
 	let { children } = $props();
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<title>CRM Horten</title>
 </svelte:head>
+
+
+<Login />
+
+
 
 {@render children()}
