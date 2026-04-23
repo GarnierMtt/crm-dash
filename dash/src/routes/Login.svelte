@@ -4,6 +4,7 @@
 
 
     import { login } from './shared.svelte.js';
+    import { text } from '@sveltejs/kit';
 
 
     const trapFocus: Attachment = (node) => {
@@ -47,7 +48,7 @@
 {#if login.show}
     <login class="loginFrame">
         <div class="loginBox" {@attach trapFocus}>
-            <form>
+            <form id="loginForm" method="post">
                 <label for="username">Mél</label>
                 <input 
                     type="email" 
@@ -67,12 +68,32 @@
                 <input
                     type="hidden"
                     name="_csrf_token"
+                    data-controller="csrf-protection"
                     value="csrf-token"
                 />
                 <button type="submit">Connecter</button>
             </form>
             <button onclick={() => {login.show = false;}}>hide</button>
         </div>
+        <script>
+            
+            const loginForm = document.getElementById("loginForm");
+            loginForm.addEventListener("submit", function(e) {
+                e.preventDefault();
+                const formData = new URLSearchParams(new FormData(this));
+                console.log(formData);
+                //*
+                fetch ("http://192.168.11.2/login", {
+                    method: "POST",
+                    credentials: "include",
+                    redirect: "follow",
+                    body: formData,
+                })
+                .then((response) => response.text())
+                .then((result) => console.log(result))
+                .catch((error) => console.error(error));//*/
+            });
+        </script>
     </login>
 {/if}
 
