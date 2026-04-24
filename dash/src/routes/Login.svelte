@@ -4,7 +4,6 @@
 
 
     import { login } from './shared.svelte.js';
-    import { text } from '@sveltejs/kit';
 
 
     const trapFocus: Attachment = (node) => {
@@ -114,7 +113,7 @@
 
     .loginBox {
 		position: relative;
-		background: var(--colorObject);
+		background: var(--objColor);
 		width: calc(100% - 2em);
 		max-width: 28em;
 		padding: 1em 1em 0.5em 1em;

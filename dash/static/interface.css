@@ -1,12 +1,33 @@
-:root{
-    --colorDark: #272635;
-    --colorBg: #CECECE;
-    --colorObject: #F7F4FF;
-    --colorHighlight: #B1E5F2;
-    --colorAccent: #F89109;
+:root {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    
+    --objColor: #F7F4FF;
+    --bgColor: #CECECE;
+    --highlightColor: #F89109;
+    --fontColor: #272635;
+    --accentColor: #B1E5F2;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('Roboto-VariableFont_wdth,wght.ttf') format('truetype');
 }
 
 
-body{
-    background-color: var(--colorBg);
+
+
+body {
+    background-color: var(--bgColor);
+    color: var(--fontColor);
+    margin: 0;
 }
+
+
+button {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
