@@ -1,11 +1,30 @@
 <script lang="ts">
+    import { global } from './global.svelte.js';
     import type { Attachment } from 'svelte/attachments';
     import { on } from 'svelte/events';
 
 
-    import { login } from './shared.svelte.js';
 
-
+    const loginSubmit: Attachment = (loginForm) => {
+        on(loginForm, "submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(loginForm as HTMLFormElement);
+            
+            fetch (global.backendURL + "/login", {
+                method: "POST",
+                credentials: "include",
+                redirect: "follow",
+                body: formData,
+            })
+            .then((response) => response.text())
+            .then((result) => {
+                if(result != "\"unauthenticated\""){
+                    window.location.reload()
+                }
+            });
+        })
+    }
+    
     const trapFocus: Attachment = (node) => {
         const previous = document.activeElement;
 
@@ -43,11 +62,11 @@
     }
 </script>
 
-<button onclick={() => { login.show = true}}>test</button>
-{#if login.show}
+
+{#if global.login}
     <login class="loginFrame">
-        <div class="loginBox" {@attach trapFocus}>
-            <form id="loginForm" method="post">
+        <div class="obj loginBox" {@attach trapFocus}>
+            <form method="post" {@attach loginSubmit}>
                 <label for="username">Mél</label>
                 <input 
                     type="email" 
@@ -70,29 +89,9 @@
                     data-controller="csrf-protection"
                     value="csrf-token"
                 />
-                <button type="submit">Connecter</button>
+                <button type="submit" class="btn">Connecter</button>
             </form>
-            <button onclick={() => {login.show = false;}}>hide</button>
         </div>
-        <script>
-            
-            const loginForm = document.getElementById("loginForm");
-            loginForm.addEventListener("submit", function(e) {
-                e.preventDefault();
-                const formData = new URLSearchParams(new FormData(this));
-                console.log(formData);
-                //*
-                fetch ("http://192.168.11.2/login", {
-                    method: "POST",
-                    credentials: "include",
-                    redirect: "follow",
-                    body: formData,
-                })
-                .then((response) => response.text())
-                .then((result) => console.log(result))
-                .catch((error) => console.error(error));//*/
-            });
-        </script>
     </login>
 {/if}
 
@@ -108,7 +107,7 @@
 		top: 0;
 		width: 100%;
 		height: 100%;
-		backdrop-filter: blur(20px);
+		backdrop-filter: blur(.5em);
 	}
 
     .loginBox {
@@ -116,8 +115,6 @@
 		background: var(--objColor);
 		width: calc(100% - 2em);
 		max-width: 28em;
-		padding: 1em 1em 0.5em 1em;
-		border-radius: 1em;
 		box-sizing: border-box;
 		user-select: none;
 	}

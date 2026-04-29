@@ -1,5 +1,16 @@
 <script lang="ts">
+    import { global } from './global.svelte.js';
 
+
+    function logout(){
+        fetch (global.backendURL + "/logout", {
+            method: "GET",
+            credentials: "include",
+            redirect: "follow",
+        })
+        .then((response) => response.text())
+        .then(() => window.location.reload());
+    }
 </script>
 
 <div class="navbar">
@@ -8,9 +19,9 @@
         <a href="/">Dashboard</a>
     </div>
     <div>
-        <button title="menue"><img src="/search.svg" alt="Logo HORTEN"/></button>
-        <button title="menue"><img src="/bell.svg" alt="Logo HORTEN"/></button>
-        <button title="menue"><img src="/profile.png" alt="Logo HORTEN"/></button>
+        <button title="search"><img src="/search.svg" alt="accèder a la recherche"/></button>
+        <button title="notification"><img src="/notifications.svg" alt="déplier notifications"/></button>
+        <button title="utilisateur" onclick={() => logout()}><img src="/profile.png" alt="profile utilisateur"/></button>
     </div>
 </div>
 

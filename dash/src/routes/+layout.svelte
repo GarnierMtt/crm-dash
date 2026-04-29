@@ -5,16 +5,15 @@
 	let { children } = $props();
 </script>
 
-<Navbar />
-
-
-
 <svelte:head>
 	<title>CRM Horten</title>
 </svelte:head>
 
+<Login />
 
+
+
+
+<Navbar />
 
 {@render children()}
-
-<Login />

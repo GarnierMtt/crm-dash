@@ -1,15 +1,16 @@
 services:
   svelte:
     image: node:24-alpine
-    #restart: ${RESTART}
+    restart: ${RESTART}
     stdin_open: true
     tty: true
     user: "node"
     working_dir: /home/node/app/dash
     environment:
       - NPM_CONFIG_LOGLEVEL=info
+      - VITE_BACKEND_URL=${BACKEND_URL}
     volumes:
       - ./:/home/node/app
     ports:
-      - "8888:8888"
-    command: ["npm", "run", "dev", "--", "--port", "8888", "--host"]
+      - "${PORT}:80"
+    command: ["npm", "run", "dev", "--", "--port", "80", "--host"]
