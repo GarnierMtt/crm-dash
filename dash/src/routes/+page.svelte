@@ -1,18 +1,8 @@
-<script module>
-  import { global } from './global.svelte.js';
+<script lang="ts">
+  import { request } from './global.svelte.ts';
 
 
-  fetch (global.backendURL, {
-      method: "GET",
-      credentials: "include",
-      redirect: "follow",
-  })
-  .then((response) => response.text())
-  .then((result) => {
-    if(result == "\"unauthenticated\""){
-      global.login = true;
-    }
-  });
+  request.show("");
   
 </script>
 

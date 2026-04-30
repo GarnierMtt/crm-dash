@@ -1,39 +1,31 @@
 <script lang="ts">
-    import { global } from './global.svelte.js';
+    import { showLogin } from './global.svelte.ts';
+    import { request } from './global.svelte.ts';
     import type { Attachment } from 'svelte/attachments';
     import { on } from 'svelte/events';
 
 
-
-    const loginSubmit: Attachment = (loginForm) => {
-        on(loginForm, "submit", function(e) {
-            e.preventDefault();
-            const formData = new FormData(loginForm as HTMLFormElement);
-            
-            fetch (global.backendURL + "/login", {
-                method: "POST",
-                credentials: "include",
-                redirect: "follow",
-                body: formData,
-            })
-            .then((response) => response.text())
-            .then((result) => {
-                if(result != "\"unauthenticated\""){
-                    window.location.reload()
-                }
-            });
-        })
+    //prevent default and handle login form subit
+    function onsubmit(e: Event) {
+        e.preventDefault();
+        const formData = new FormData(e.target as HTMLFormElement);
+        
+        request.new("/login", formData);
     }
     
-    const trapFocus: Attachment = (node) => {
-        const previous = document.activeElement;
+    //stop focus from drifting outside the login box
+    const trapFocus: Attachment = (loginBox) => {
 
         function focusable() {
-            return Array.from(node.querySelectorAll('button, input'));
+            return Array.from(loginBox.querySelectorAll('button, input')) as HTMLElement[];
         }
+
+
+        focusable()[0]?.focus();
         
-        function handleKeydown(event) {
-            if (event.key !== 'Tab') return;
+        on(loginBox, 'keydown', function(event){
+            const e = event as KeyboardEvent;
+            if(e.key !== 'Tab') return;
 
             const current = document.activeElement;
 
@@ -41,33 +33,24 @@
             const first = elements.at(0);
             const last = elements.at(-1);
 
-            if (event.shiftKey && current === first) {
-                last.focus();
-                event.preventDefault();
+            if(e.shiftKey && current === first) {
+                last?.focus();
+                e.preventDefault();
+            }else if(!e.shiftKey && current === last) {
+                first?.focus();
+                e.preventDefault();
             }
-
-            if (!event.shiftKey && current === last) {
-                first.focus();
-                event.preventDefault();
-            }
-        }
-
-        focusable()[0]?.focus();
-        const off = on(node, 'keydown', handleKeydown);
-
-        return () => {
-            off();
-            previous?.focus();
-        };
+        });
     }
+    
 </script>
 
 
-{#if global.login}
+{#if showLogin}
     <login class="loginFrame">
         <div class="obj loginBox" {@attach trapFocus}>
-            <form method="post" {@attach loginSubmit}>
-                <label for="username">Mél</label>
+            <form method="post" {onsubmit}>
+                <label for="username">Mél :</label>
                 <input 
                     type="email" 
                     name="_username" 
@@ -75,7 +58,8 @@
                     autocomplete="email"
                     required
                 />
-                <label for="password">Mot de passe</label>
+                <br>
+                <label for="password">Mot de passe :</label>
                 <input
                     type="password"
                     name="_password"
@@ -83,6 +67,7 @@
                     autocomplete="current-password"
                     required
                 />
+                <br>
                 <input
                     type="hidden"
                     name="_csrf_token"
@@ -122,5 +107,14 @@
     .loginBox > form {
         display: flex;
         flex-direction: column;
+    }
+
+    button {
+        width: min-content;
+        align-self: end;
+    }
+
+    label {
+        font-weight: bold;
     }
 </style>
